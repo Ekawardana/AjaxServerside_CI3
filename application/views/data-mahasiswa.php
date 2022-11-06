@@ -24,7 +24,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalTitle">Tambah Data</h5>
+                        <h5 class="modal-title" id="modalTitle">Modal Title</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -32,6 +32,7 @@
 
                     <div class="modal-body form">
                         <form action="#" id="formData">
+                            <input type="hidden" name="id" id="id" value="">
                             <div class="form-group">
                                 <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukan Nama Lengkap...">
                             </div>
@@ -64,6 +65,7 @@
                             <th>Nama</th>
                             <th>Alamat</th>
                             <th>Telepon</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -85,6 +87,7 @@
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
     <script>
+        var saveData;
         var modal = $('#modalData');
         var tableData = $('#myTable');
         var formData = $('#formData');
@@ -110,23 +113,28 @@
         // Reload Table
         function reloadTable() {
             tableData.DataTable().ajax.reload();
-            btnSave.text('Tambah');
-            btnSave.attr('disabled', false);
+            // btnSave.text('Tambah');
+            // btnSave.attr('disabled', false);
 
         }
 
         // Menampilkan Modal
         function add() {
+            saveData = 'tambah';
             formData[0].reset();
             modal.modal('show');
             modalTitle.text('Tambah Data Mahasiswa');
         }
 
-        // Fungsi ketika btn tambah diklik
+        // Fungsi ketika btn tambah dan ubah diklik
         function save() {
             btnSave.text('Mohon Tunggu...');
             btnSave.attr('disabled', true);
-            url = "<?= base_url('mahasiswa/add'); ?>"
+            if (saveData == 'tambah') {
+                url = "<?= base_url('mahasiswa/add'); ?>"
+            } else {
+                url = "<?= base_url('mahasiswa/update'); ?>"
+            }
 
             $.ajax({
                 type: "POST",
@@ -142,6 +150,29 @@
                 error: function() {
                     // Pesan Error
                     console.log('error database');
+                }
+            })
+        }
+
+        function byid(id, type) {
+            if (type == 'edit') {
+                saveData = 'edit';
+                formData[0].reset();
+            }
+
+            $.ajax({
+                type: "GET",
+                url: "<?= base_url('mahasiswa/byid/') ?>" + id,
+                dataType: "JSON",
+                success: function(response) {
+                    modalTitle.text('Ubah Data');
+                    btnSave.text('Ubah');
+                    btnSave.attr('disabled', false);
+                    $('[name="id"]').val(response.id);
+                    $('[name="nama"]').val(response.nama);
+                    $('[name="alamat"]').val(response.alamat);
+                    $('[name="no_hp"]').val(response.no_hp);
+                    modal.modal('show');
                 }
             })
         }
