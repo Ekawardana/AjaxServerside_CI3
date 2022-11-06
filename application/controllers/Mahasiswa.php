@@ -38,4 +38,21 @@ class Mahasiswa extends CI_Controller
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output));
     }
+
+    public function add()
+    {
+        $data = [
+            'nama' => htmlspecialchars($this->input->post('nama')),
+            'alamat' => htmlspecialchars($this->input->post('alamat')),
+            'no_hp' => htmlspecialchars($this->input->post('no_hp')),
+        ];
+
+        if ($this->mahasiswa->create($data) > 0) {
+            $message['status'] = 'Success';
+        } else {
+            $message['status'] = 'Failed';
+        }
+
+        $this->output->set_content_type('application/json')->set_output(json_encode($message));
+    }
 }

@@ -20,7 +20,7 @@ class Model_mahasiswa extends CI_Model
         if (isset($_POST['order'])) {
             $this->db->order_by($this->order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
         } else {
-            $this->db->order_by('nama', 'ASC');
+            $this->db->order_by('id', 'DESC');
         }
     }
 
@@ -45,5 +45,11 @@ class Model_mahasiswa extends CI_Model
     {
         $this->db->from($this->table);
         return $this->db->count_all_results();
+    }
+
+    public function create($data)
+    {
+        $this->db->insert('mahasiswa', $data);
+        return $this->db->affected_rows();
     }
 }
