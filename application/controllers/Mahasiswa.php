@@ -26,6 +26,7 @@ class Mahasiswa extends CI_Controller
             $row[] = ++$no;
             $row[] = $result->nama;
             $row[] = $result->alamat;
+            $row[] = $result->email;
             $row[] = $result->no_hp;
             $row[] = '<a href="#" class="btn btn-success btn-sm" onclick="byid(' . "'" . $result->id . "','edit'" . ')">Edit</a>';
             $data[] = $row;
@@ -41,12 +42,14 @@ class Mahasiswa extends CI_Controller
         $this->output->set_content_type('application/json')->set_output(json_encode($output));
     }
 
+    // Insert Data
     public function add()
     {
         $data = [
             'nama' => htmlspecialchars($this->input->post('nama')),
             'alamat' => htmlspecialchars($this->input->post('alamat')),
-            'no_hp' => htmlspecialchars($this->input->post('no_hp')),
+            'email' => htmlspecialchars($this->input->post('email')),
+            'no_hp' => htmlspecialchars($this->input->post('no_hp'))
         ];
 
         if ($this->mahasiswa->create($data) > 0) {
@@ -58,18 +61,21 @@ class Mahasiswa extends CI_Controller
         $this->output->set_content_type('application/json')->set_output(json_encode($message));
     }
 
+    // Ambil data berdasarkan id
     public function byid($id)
     {
         $data = $this->mahasiswa->getDataById($id);
         $this->output->set_content_type('application/json')->set_output(json_encode($data));
     }
 
+    // Update Data
     public function update()
     {
         $data = [
             'nama' => htmlspecialchars($this->input->post('nama')),
             'alamat' => htmlspecialchars($this->input->post('alamat')),
-            'no_hp' => htmlspecialchars($this->input->post('no_hp')),
+            'email' => htmlspecialchars($this->input->post('email')),
+            'no_hp' => htmlspecialchars($this->input->post('no_hp'))
         ];
 
         if ($this->mahasiswa->update(array('id' => $this->input->post('id')), $data) > 0) {

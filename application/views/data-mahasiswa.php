@@ -40,6 +40,9 @@
                                 <input type="text" class="form-control" name="alamat" id="alamat" placeholder="Masukan Alamat....">
                             </div>
                             <div class="form-group">
+                                <input type="text" class="form-control" name="email" id="email" placeholder="Masukan Email....">
+                            </div>
+                            <div class="form-group">
                                 <input type="text" class="form-control" name="no_hp" id="no_hp" placeholder="Masukan Nomor Telepon...">
                             </div>
 
@@ -64,6 +67,7 @@
                             <th>No</th>
                             <th>Nama</th>
                             <th>Alamat</th>
+                            <th>Email</th>
                             <th>Telepon</th>
                             <th>Aksi</th>
                         </tr>
@@ -154,6 +158,7 @@
             })
         }
 
+        // Ketika ada id yang di ambil
         function byid(id, type) {
             if (type == 'edit') {
                 saveData = 'edit';
@@ -171,6 +176,7 @@
                     $('[name="id"]').val(response.id);
                     $('[name="nama"]').val(response.nama);
                     $('[name="alamat"]').val(response.alamat);
+                    $('[name="email"]').val(response.email);
                     $('[name="no_hp"]').val(response.no_hp);
                     modal.modal('show');
                 }
