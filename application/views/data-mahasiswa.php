@@ -165,22 +165,43 @@
                 formData[0].reset();
             }
 
+            // Ajax Edit & Hapus
             $.ajax({
                 type: "GET",
                 url: "<?= base_url('mahasiswa/byid/') ?>" + id,
                 dataType: "JSON",
                 success: function(response) {
-                    modalTitle.text('Ubah Data');
-                    btnSave.text('Ubah');
-                    btnSave.attr('disabled', false);
-                    $('[name="id"]').val(response.id);
-                    $('[name="nama"]').val(response.nama);
-                    $('[name="alamat"]').val(response.alamat);
-                    $('[name="email"]').val(response.email);
-                    $('[name="no_hp"]').val(response.no_hp);
-                    modal.modal('show');
+                    if (type == 'edit') {
+                        modalTitle.text('Ubah Data');
+                        btnSave.text('Ubah');
+                        btnSave.attr('disabled', false);
+                        $('[name="id"]').val(response.id);
+                        $('[name="nama"]').val(response.nama);
+                        $('[name="alamat"]').val(response.alamat);
+                        $('[name="email"]').val(response.email);
+                        $('[name="no_hp"]').val(response.no_hp);
+                        modal.modal('show');
+                    } else {
+                        var result = confirm('Anda akan menghapus ' + response.nama + ', Yakin??');
+                        if (result) { //Jika ditekan OK
+                            deleteData(response.id);
+
+                        }
+                    }
                 }
             })
+        }
+
+        function deleteData(id) {
+            $.ajax({
+                type: "POST",
+                url: "<?= base_url('mahasiswa/delete/'); ?>" + id,
+                dataType: "JSON",
+                success: function(response) {
+                    reloadTable();
+                }
+            })
+
         }
     </script>
 </body>

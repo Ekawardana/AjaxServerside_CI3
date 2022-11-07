@@ -28,7 +28,11 @@ class Mahasiswa extends CI_Controller
             $row[] = $result->alamat;
             $row[] = $result->email;
             $row[] = $result->no_hp;
-            $row[] = '<a href="#" class="btn btn-success btn-sm" onclick="byid(' . "'" . $result->id . "','edit'" . ')">Edit</a>';
+            $row[] = '
+            <a href="#" class="btn btn-success btn-sm" onclick="byid(' . "'" . $result->id . "','edit'" . ')">Edit</a>
+            <a href="#" class="btn btn-danger btn-sm" onclick="byid(' . "'" . $result->id . "','delete'" . ')">Hapus</a>
+            ';
+
             $data[] = $row;
         }
 
@@ -79,6 +83,18 @@ class Mahasiswa extends CI_Controller
         ];
 
         if ($this->mahasiswa->update(array('id' => $this->input->post('id')), $data) > 0) {
+            $message['status'] = 'Success';
+        } else {
+            $message['status'] = 'Failed';
+        }
+
+        $this->output->set_content_type('application/json')->set_output(json_encode($message));
+    }
+
+    // Delete Data
+    public function delete($id)
+    {
+        if ($this->mahasiswa->delete($id) > 0) {
             $message['status'] = 'Success';
         } else {
             $message['status'] = 'Failed';

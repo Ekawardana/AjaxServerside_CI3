@@ -63,4 +63,10 @@ class Model_mahasiswa extends CI_Model
         $this->db->update($this->table, $data, $where);
         return $this->db->affected_rows();
     }
+
+    public function delete($id)
+    {
+        $this->db->delete($this->table, ['id' => $id]);
+        return $this->db->affected_rows();
+    }
 }
