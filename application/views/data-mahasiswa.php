@@ -35,15 +35,19 @@
                             <input type="hidden" name="id" id="id" value="">
                             <div class="form-group">
                                 <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukan Nama Lengkap...">
+                                <div class="invalid-feedback is-invalid"></div>
                             </div>
                             <div class="form-group">
                                 <input type="text" class="form-control" name="alamat" id="alamat" placeholder="Masukan Alamat....">
+                                <div class="invalid-feedback is-invalid"></div>
                             </div>
                             <div class="form-group">
                                 <input type="text" class="form-control" name="email" id="email" placeholder="Masukan Email....">
+                                <div class="invalid-feedback is-invalid"></div>
                             </div>
                             <div class="form-group">
                                 <input type="text" class="form-control" name="no_hp" id="no_hp" placeholder="Masukan Nomor Telepon...">
+                                <div class="invalid-feedback is-invalid"></div>
                             </div>
 
                         </form>
@@ -146,10 +150,17 @@
                 data: formData.serialize(),
                 dataType: "JSON",
                 success: function(response) {
-                    if (response.status == 'Success') {
+                    if (response.status == 'success') {
                         modal.modal('hide');
                         reloadTable();
+                    } else {
+                        for (var i = 0; i < response.inputerror.length; i++) {
+                            $('[name="' + response.inputerror[i] + '"]').addClass('is-invalid');
+                            $('[name="' + response.inputerror[i] + '"]').next().text(response.error_string[i]);
+                        }
                     }
+                    btnSave.text('Simpan Data..');
+                    btnSave.attr('disabled', false);
                 },
                 error: function() {
                     // Pesan Error
@@ -172,6 +183,7 @@
                 dataType: "JSON",
                 success: function(response) {
                     if (type == 'edit') {
+                        formData.find('input').removeClass('is-invalid');
                         modalTitle.text('Ubah Data');
                         btnSave.text('Ubah');
                         btnSave.attr('disabled', false);

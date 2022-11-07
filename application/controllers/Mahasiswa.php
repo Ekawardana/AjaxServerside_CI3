@@ -8,6 +8,7 @@ class Mahasiswa extends CI_Controller
         parent::__construct();
         $this->load->model('Model_mahasiswa', 'mahasiswa');
     }
+
     public function index()
     {
         $data["title"] = "Mahasiswa";
@@ -49,6 +50,7 @@ class Mahasiswa extends CI_Controller
     // Insert Data
     public function add()
     {
+        $this->_validation();
         $data = [
             'nama' => htmlspecialchars($this->input->post('nama')),
             'alamat' => htmlspecialchars($this->input->post('alamat')),
@@ -57,9 +59,9 @@ class Mahasiswa extends CI_Controller
         ];
 
         if ($this->mahasiswa->create($data) > 0) {
-            $message['status'] = 'Success';
+            $message['status'] = 'success';
         } else {
-            $message['status'] = 'Failed';
+            $message['status'] = 'failed';
         }
 
         $this->output->set_content_type('application/json')->set_output(json_encode($message));
@@ -75,6 +77,7 @@ class Mahasiswa extends CI_Controller
     // Update Data
     public function update()
     {
+        $this->_validation();
         $data = [
             'nama' => htmlspecialchars($this->input->post('nama')),
             'alamat' => htmlspecialchars($this->input->post('alamat')),
@@ -82,10 +85,10 @@ class Mahasiswa extends CI_Controller
             'no_hp' => htmlspecialchars($this->input->post('no_hp'))
         ];
 
-        if ($this->mahasiswa->update(array('id' => $this->input->post('id')), $data) > 0) {
-            $message['status'] = 'Success';
+        if ($this->mahasiswa->update(array('id' => $this->input->post('id')), $data) >= 0) {
+            $message['status'] = 'success';
         } else {
-            $message['status'] = 'Failed';
+            $message['status'] = 'failed';
         }
 
         $this->output->set_content_type('application/json')->set_output(json_encode($message));
@@ -101,5 +104,39 @@ class Mahasiswa extends CI_Controller
         }
 
         $this->output->set_content_type('application/json')->set_output(json_encode($message));
+    }
+
+    private function _validation()
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = true;
+
+        if ($this->input->post('nama') == '') {
+            $data['inputerror'][] = 'nama';
+            $data['error_string'][] = 'Nama Wajib Di Isi!!!';
+            $data['status'] = false;
+        }
+        if ($this->input->post('alamat') == '') {
+            $data['inputerror'][] = 'alamat';
+            $data['error_string'][] = 'Alamat Wajib Di Isi!!!';
+            $data['status'] = false;
+        }
+        if ($this->input->post('email') == '') {
+            $data['inputerror'][] = 'email';
+            $data['error_string'][] = 'Email Wajib Di Isi!!!';
+            $data['status'] = false;
+        }
+        if ($this->input->post('no_hp') == '') {
+            $data['inputerror'][] = 'no_hp';
+            $data['error_string'][] = 'Telepon Wajib Di Isi!!!';
+            $data['status'] = false;
+        }
+
+        if ($data['status'] == false) {
+            echo json_encode($data);
+            exit();
+        }
     }
 }
