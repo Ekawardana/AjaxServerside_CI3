@@ -12,7 +12,9 @@ class Mahasiswa extends CI_Controller
     public function index()
     {
         $data["title"] = "Mahasiswa";
-        $this->load->view('data-mahasiswa', $data);
+        $this->load->view('templates/header', $data);
+        $this->load->view('data-mahasiswa');
+        $this->load->view('data-mahasiswa_js');
     }
 
     // Menampilkan Data Dari Serverside
